@@ -1,14 +1,13 @@
-{% extends "templates/web.html" %}
-
-{% block head %}
+<html>
   <script type="text/javascript">
     async function incrementAndRedirect(name, longUrl) {
       try {
-        // Call the API to increment the redirect counter
-        let response = await fetch(
-          `/api/method/pibicut.pibicut.doctype.shortener.shortener.increment_redirect?name=${name}`,
-          { method: 'POST' }
-        );
+        // Construct the query string for the GET request
+        const queryString = new URLSearchParams({ name: name }).toString();
+        const apiEndpoint = `/api/method/pibicut.pibicut.doctype.shortener.shortener.increment_redirect?${queryString}`;
+
+        // Make the GET request to increment the redirect count
+        let response = await fetch(apiEndpoint, { method: 'GET' });
 
         // Proceed with redirection regardless of the API response
         window.location.replace(longUrl);
@@ -22,13 +21,12 @@
     // Start redirection after incrementing the counter
     incrementAndRedirect("{{ name }}", "{{ long_url }}");
   </script>
-{% endblock %}
-
-{% block page_content %}
-  <div class="row">
+</html>
+<body>
+  <div>
     <span>
       <p>Redirecting to</p>
       <a href='{{ long_url }}' style="color:#4682b4;">{{ long_url }}</a>
     </span>
   </div>
-{% endblock %}
+</body>
