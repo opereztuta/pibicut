@@ -118,6 +118,7 @@ def increment_redirect_count(name):
 
         # Save the document back to the database
         shortener_doc.save(ignore_permissions=True)
+        frappe.db.commit()
 
     except frappe.DoesNotExistError:
         frappe.throw(_("Shortener not found: {0}").format(name))
@@ -125,12 +126,14 @@ def increment_redirect_count(name):
     return shortener_doc.redirect_count
 
 
-@frappe.whitelist()
+@frappe.whitelist(allow_guest=True)
 def increment_redirect(name):
     """
     Wrapper function to whitelist incrementing redirect counts.
     Args:
         name (str): The name of the Shortener document to update.
     """
+    print("Name:", name)
     count = increment_redirect_count(name)
+    print("Count:", count)
     return {"status": "success", "new_count": count}
