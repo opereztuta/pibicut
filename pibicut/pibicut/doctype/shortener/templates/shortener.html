@@ -2,16 +2,33 @@
 
 {% block head %}
   <script type="text/javascript">
-    window.location.replace("{{ long_url }}");
+    async function incrementAndRedirect(name, longUrl) {
+      try {
+        // Call the API to increment the redirect counter
+        let response = await fetch(
+          `/api/method/pibicut.pibicut.doctype.shortener.shortener.increment_redirect?name=${name}`,
+          { method: 'POST' }
+        );
+
+        // Proceed with redirection regardless of the API response
+        window.location.replace(longUrl);
+      } catch (error) {
+        console.error("Error incrementing redirect count:", error);
+        // Proceed with redirection in case of error
+        window.location.replace(longUrl);
+      }
+    }
+
+    // Start redirection after incrementing the counter
+    incrementAndRedirect("{{ name }}", "{{ long_url }}");
   </script>
 {% endblock %}
 
 {% block page_content %}
   <div class="row">
     <span>
-       <p>Redirecting to</p><a href='{{ long_url }}' style="color:#4682b4;"> {{ long_url }}</a>
+      <p>Redirecting to</p>
+      <a href='{{ long_url }}' style="color:#4682b4;">{{ long_url }}</a>
     </span>
-  </div> 
+  </div>
 {% endblock %}
-
-<!-- this is a sample default web page template -->
