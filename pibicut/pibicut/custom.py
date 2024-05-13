@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) 2021, PibiCo and contributors
 # For license information, please see license.txt
-from frappe.utils.file_manager import get_file_path, save_file
+from frappe.utils.file_manager import get_file_path, save_file, remove_file
 from frappe import log_error
 import os
 import qrcode
@@ -31,7 +31,7 @@ def get_qrcode(input_data, logo=None, file_name=None, dn=None, df=None):
     qr = qrcode.QRCode(
         version=1,
         error_correction=qrcode.constants.ERROR_CORRECT_H,
-        box_size=10,
+        box_size=24,
         border=4,
     )
     qr.add_data(input_data)
@@ -73,6 +73,9 @@ def get_qrcode(input_data, logo=None, file_name=None, dn=None, df=None):
 
     # Provide a proper file name for saving the image
     file_name = f"{file_name}.png"
+
+    if file_exists(file_name):
+        remove_file(file_name)
 
     # Save the file to the Frappe file system using raw binary data
     file_doc = save_file(
