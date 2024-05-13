@@ -5,6 +5,7 @@ from frappe.utils.file_manager import get_file_path, save_file, remove_file
 from frappe import log_error
 import os
 import qrcode
+from qrcode.image.svg import SvgImage
 from PIL import Image
 import base64
 from io import BytesIO
@@ -90,6 +91,63 @@ def get_qrcode(input_data, logo=None, file_name=None, dn=None, df=None):
 
     # Return the file URL for attachment
     return file_doc.file_url
+
+
+def get_svg_qrcode(input_data, file_name=None, dn=None, df=None):
+    """
+    Generates a QR code with an optional logo embedded in the center.
+    This version supports generating QR codes as SVG images.
+
+    Args:
+        input_data (str): The data to encode into the QR code.
+        file_name (str, optional): The desired file name for the QR code image.
+        dn (str, optional): The name of the document.
+        df (str, optional): The field name to attach to.
+
+    Returns:
+        str: The URL of the saved file or base64-encoded image if no filename is provided.
+    """
+
+    # Create the QR code object
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_H,
+        box_size=10,  # Adjusted for typical QR code size, change if higher resolution is needed
+        border=4,
+    )
+    qr.add_data(input_data)
+    qr.make(fit=True)
+
+    # Create the QR code image as SVG
+    qr_img = qr.make_image(image_factory=SvgImage)
+
+    # Save the QR code to a temporary buffer
+    temp = BytesIO()
+    qr_img.save(temp)
+    temp.seek(0)
+    
+    # Handling file save or base64 encoding similar to your existing code
+    if not file_name or not dn or not df:
+        return "data:image/svg+xml;base64,{0}".format(base64.b64encode(temp.getvalue()).decode("utf-8"))
+
+    file_name = f"{file_name}.svg"  # Ensure the file extension is .svg
+
+    if file_exists(file_name):
+        remove_file(file_name)
+
+    # Save the file to the Frappe file system using raw binary data
+    file_doc = save_file(
+        fname=file_name,
+        content=temp.getvalue(),  # Use raw SVG bytes
+        dt="Shortener",
+        dn=dn,
+        df=df,
+        folder=None,
+        is_private=0  # Set to 1 if you want the file to be private
+    )
+
+    return file_doc.file_url
+
 
 
 def file_exists(file_name):
