@@ -6,7 +6,7 @@ import frappe.utils.file_manager
 from frappe.website.website_generator import WebsiteGenerator
 from urllib.parse import urlparse, urlunparse
 from frappe.utils import random_string, get_url
-from pibicut.pibicut.custom import get_qrcode, file_exists
+from pibicut.pibicut.custom import get_qrcode, file_exists, get_svg_qrcode
 
 no_cache = 1
 
@@ -99,6 +99,8 @@ class Shortener(WebsiteGenerator):
 
         self.qr_code = get_qrcode(
             qr_code, logo, url_short, self.name, 'qr_code')
+        self.svg_qr_code = get_svg_qrcode(
+            qr_code, url_short, self.name, 'qr_code')
         self.published = True
         self.route = url_short
 

@@ -1,9 +1,10 @@
-## Pibicut
+## Zoni QR Codes
 
-PibiCut is a very Simple Frappe App to produce Shorten URLs on a Frappe Server and at the same time a QR Code to the short URL.
+Zoni QR Codes is based on PibiCut is a very Simple Frappe App to produce Shorten URLs on a Frappe Server and at the same time a QR Code to the short URL.
 
 ## License
 
+MIT# Zoni
 MIT# PibiCut
 
 ## Requirements

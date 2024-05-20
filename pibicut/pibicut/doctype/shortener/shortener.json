@@ -16,6 +16,7 @@
   "cb_01",
   "description",
   "qr_code",
+  "svg_qr_code",
   "qr_preview",
   "redirect_count"
  ],
@@ -92,13 +93,18 @@
    "in_list_view": 1,
    "in_preview": 1,
    "label": "Description"
+  },
+  {
+   "fieldname": "svg_qr_code",
+   "fieldtype": "Attach Image",
+   "label": "SVG QR Code"
   }
  ],
  "has_web_view": 1,
  "image_field": "qr_code",
  "is_published_field": "published",
  "links": [],
- "modified": "2024-05-10 15:35:35.440774",
+ "modified": "2024-05-13 14:43:31.885645",
  "modified_by": "Administrator",
  "module": "Pibicut",
  "name": "Shortener",
